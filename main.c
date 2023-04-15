@@ -1,43 +1,64 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <math.h>
 
-float FUNC(float x)
+double FUNC(double x)
 {
-  float result;
-  result = pow(x, 3) - 6 * pow(x, 2) + 4 * x + 12;
-  return result;
+  return pow(x, 3) - 6 * pow(x, 2) + 4 * x + 12;
 }
 
 int main()
 {
-  int firstValue, secondValue, productFunction;
-  float a, b, m, m_ant, margem_error = 0.001;
+  double A, B, M, MA, FM, FA, FB, erro;
 
-  srand(time(NULL));
+  printf("Defina limite inferior do intervalo: ");
+  scanf("%lf", &A);
+  printf("Defina limite superior do intervalo: ");
+  scanf("%lf", &B);
+  printf("Defina o erro, em decimal: ");
+  scanf("%lf", &erro);
 
-  firstValue = rand() % 10;
-  secondValue = rand() % 10;
+  FA = FUNC(A);
+  FB = FUNC(B);
 
-  productFunction = FUNC(firstValue) * FUNC(secondValue);
-  printf("%d\n\n", productFunction);
-
-  while (productFunction > 0)
+  if (FA * FB == 0)
   {
-    firstValue = rand() % 10;
-    secondValue = rand() % 10;
-
-    productFunction = FUNC(firstValue) * FUNC(secondValue);
-    printf("%d\n\n", productFunction);
+    printf("A ou B são raízes\n");
+    if (FA == 0)
+    {
+      printf("A é a raiz: %lf\n", A);
+    }
+    else
+    {
+      printf("B é a raiz: %lf\n", B);
+    }
+    return 0;
   }
 
-  if (productFunction == 0)
+  if (FA * FB > 0)
   {
-    printf("IGUAL A 0");
+    printf("Intervalo inválido! Tente novamente.\n");
+    return 0;
   }
-  else if (productFunction < 0)
+
+  M = (A + B) / 2;
+  MA = A;
+  while (fabs(MA - M) > erro)
   {
-    printf("MENOR QUE 0");
+    FM = FUNC(M);
+    if (FA * FM > 0)
+    {
+      A = M;
+      FA = FM;
+    }
+    else
+    {
+      B = M;
+      FB = FM;
+    }
+    MA = M;
+    M = (A + B) / 2;
   }
+  printf("A raiz da função é aproximadamente igual a %lf\n", M);
+  return 0;
 }
